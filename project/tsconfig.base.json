@@ -5,6 +5,7 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
@@ -14,7 +15,18 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@project/module/blog": ["libs/module/blog/src/index.ts"],
+      "@project/module/comments": ["libs/module/comments/src/index.ts"],
+      "@project/module/likes": ["libs/module/likes/src/index.ts"],
+      "@project/module/posts": ["libs/module/posts/src/index.ts"],
+      "@project/module/tags": ["libs/module/tags/src/index.ts"],
+      "@project/module/users": ["libs/module/users/src/index.ts"],
+      "@project/shared/core": ["libs/shared/core/src/index.ts"],
+      "@project/shared/data-access": ["libs/shared/data-access/src/index.ts"],
+      "@project/shared/helpers": ["libs/shared/helpers/src/index.ts"],
+      "@project/shared/types": ["libs/shared/types/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
