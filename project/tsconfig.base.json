@@ -16,6 +16,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@project/config/users": ["libs/config/users/src/index.ts"],
       "@project/module/blog": ["libs/module/blog/src/index.ts"],
       "@project/module/comments": ["libs/module/comments/src/index.ts"],
       "@project/module/likes": ["libs/module/likes/src/index.ts"],

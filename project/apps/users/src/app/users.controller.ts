@@ -1,14 +1,11 @@
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
-import { UpdatePasswordDto } from './dto/update-password.dto';
+import { CreateUserDto, LoginUserDto, UpdatePasswordDto, UserService } from '@project/module/users';
 
 @Controller('users')
 export class UsersController {
   constructor(
-    private readonly usersService: UsersService
+    private readonly usersService: UserService
   ) {}
 
   @Post('/')
@@ -36,14 +33,12 @@ export class UsersController {
 
   @Put(':id/password')
   public async updatePassword(@Param('id') id: string, @Body() dto: UpdatePasswordDto) {
-    console.log(id);
     const user = await this.usersService.updatePassword(id, dto);
     return user.toPOJO();
   }
 
   @Put('/subscribe')
   public async subscribe(@Query('userId') userId: string) {
-    console.log(userId);
     return userId;
   }
 }

@@ -3,21 +3,21 @@ import { ConflictException, Injectable, NotFoundException, UnauthorizedException
 
 import { UserRole } from '@project/shared/core';
 
-import { USER_EXISTS, USER_NOT_FOUND, USER_PASSWORD_WRONG } from './users.constant';
-import { UsersEntity } from './users.entity';
-import { UsersRepository } from './users.repository';
+import { USER_EXISTS, USER_NOT_FOUND, USER_PASSWORD_WRONG } from './user.constant';
+import { UserEntity } from './user.entity';
+import { UserRepository } from './user.repository';
 
 import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
-    private readonly userRepository: UsersRepository
+    private readonly userRepository: UserRepository
   ) {}
 
-  public async register(dto: CreateUserDto): Promise<UsersEntity> {
+  public async register(dto: CreateUserDto): Promise<UserEntity> {
     const {email, firstname, lastname, password, dateBirth} = dto;
 
     const user = {
@@ -38,7 +38,7 @@ export class UsersService {
       throw new ConflictException(USER_EXISTS);
     }
 
-    const userEntity = await new UsersEntity(user)
+    const userEntity = await new UserEntity(user)
       .setPassword(password)
 
     await this.userRepository.save(userEntity);
@@ -79,12 +79,12 @@ export class UsersService {
   }
 
   public async getUser(id: string) {
-    const user = await this.userRepository.findById(id);
+    const userEntity = await this.userRepository.findById(id);
 
-    if (! user) {
+    if (!userEntity) {
       throw new NotFoundException(USER_NOT_FOUND);
     }
 
-    return user;
+    return userEntity;
   }
 }
