@@ -4,7 +4,9 @@
   "license": "MIT",
   "scripts": {
     "mongodb:start": "docker compose --file \"./apps/users/docker-compose.dev.yml\" --env-file \"./apps/users/users.env\" --project-name \"readme-users\" up -d",
-    "mongodb:stop": "docker compose --file \"./apps/users/docker-compose.dev.yml\" --env-file \"./apps/users/users.env\" --project-name \"readme-users\" down"
+    "mongodb:stop": "docker compose --file \"./apps/users/docker-compose.dev.yml\" --env-file \"./apps/users/users.env\" --project-name \"readme-users\" down",
+    "postgres:start": "docker compose --file \"./apps/blog/docker-compose.dev.yml\" --env-file \"./apps/blog/blog.env\" --project-name \"readme-blog\" up -d",
+    "postgres:stop": "docker compose --file \"./apps/blog/docker-compose.dev.yml\"  --env-file \"./apps/blog/blog.env\" --project-name \"readme-blog\" down"
   },
   "private": true,
   "dependencies": {
@@ -14,6 +16,7 @@
     "@nestjs/mongoose": "^10.0.6",
     "@nestjs/platform-express": "^10.0.2",
     "@nestjs/swagger": "^7.3.1",
+    "@prisma/client": "5.12.1",
     "axios": "^1.6.0",
     "bcrypt": "5.1.1",
     "class-transformer": "0.5.1",
@@ -50,6 +53,7 @@
     "jest-environment-node": "^29.4.1",
     "nx": "18.2.1",
     "prettier": "^2.6.2",
+    "prisma": "5.12.1",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",
     "typescript": "~5.4.2",

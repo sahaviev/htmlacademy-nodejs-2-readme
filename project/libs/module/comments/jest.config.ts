@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'module-comments',
+  // displayName: 'module-comments',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

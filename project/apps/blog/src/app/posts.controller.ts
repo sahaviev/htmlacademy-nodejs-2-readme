@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { fillDto } from '@project/shared/helpers';
@@ -31,9 +42,17 @@ export class PostsController {
     description: PostResponseMessage.PostFound,
     type: PostRdo,
   })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: PostResponseMessage.PostNotFound,
+  })
   @Get('/:postId')
   public async show(@Param('postId') postId: string) {
     const postEntity = await this.postService.getPostById(postId);
+    if (!postEntity) {
+      throw new NotFoundException(`Post with id «${postId}» not found`);
+    }
+
     return fillDto(PostRdo, postEntity.toPOJO());
   }
 
@@ -42,9 +61,14 @@ export class PostsController {
     description: PostResponseMessage.PostCreated,
     type: PostRdo,
   })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: PostResponseMessage.TagsNotFound,
+  })
   @Post('/')
   public async create(@Body() dto: CreatePostDto) {
     const tagEntities = await this.tagService.getTagsByIds(dto.tags);
+
     const tags = tagEntities.map((tag) => tag.toPOJO());
     const postEntity = await this.postService.createPost(dto, tags);
     return fillDto(PostRdo, postEntity.toPOJO());
@@ -54,6 +78,14 @@ export class PostsController {
     status: HttpStatus.OK,
     description: PostResponseMessage.PostUpdated,
     type: PostRdo,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: PostResponseMessage.TagsNotFound,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: PostResponseMessage.PostNotFound,
   })
   @Patch('/:postId')
   public async update(@Param('postId') postId: string, @Body() dto: UpdatePostDto) {
@@ -66,7 +98,12 @@ export class PostsController {
     status: HttpStatus.NO_CONTENT,
     description: PostResponseMessage.PostDeleted,
   })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: PostResponseMessage.PostNotFound,
+  })
   @Delete('/:postId')
+  @HttpCode(HttpStatus.NO_CONTENT)
   public async delete(@Param('postId') postId: string) {
     await this.postService.deletePost(postId);
   }

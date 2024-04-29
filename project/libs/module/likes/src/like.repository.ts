@@ -1,30 +1,59 @@
 import { Injectable } from '@nestjs/common';
 
-import { BaseMemoryRepository } from '@project/shared/data-access';
+import { BasePostgresRepository } from '@project/shared/data-access';
 
 import { LikeEntity } from './like.entity';
 import { LikeFactory } from './like.factory';
+import { Like } from '@project/shared/types';
+import { PrismaClientService } from '@project/models';
 
 @Injectable()
-export class LikeRepository extends BaseMemoryRepository<LikeEntity> {
-  constructor(entityFactory: LikeFactory) {
-    super(entityFactory);
+export class LikeRepository extends BasePostgresRepository<LikeEntity, Like> {
+  constructor(
+    entityFactory: LikeFactory,
+    readonly client: PrismaClientService,
+  ) {
+    super(entityFactory, client);
+  }
+
+  public async save(entity: LikeEntity) {
+    const record = await this.client.like.create({
+      data: { ...entity.toPOJO() }
+    });
+
+    entity.id = record.id;
   }
 
   public async findByPostId(postId: string) {
-    const entities = Array.from(this.entities.values());
-    const likes = entities.filter((entity) => entity.postId === postId);
-    return likes.map(this.entityFactory.create);
+    const documents = await this.client.like.findMany({
+      where: {
+        postId,
+      },
+    });
+
+    return documents.map(this.createEntityFromDocument);
   }
 
   public async findByPostIdAndUserId(postId: string, userId: string) {
-    const entities = Array.from(this.entities.values());
-    const like = entities.find((entity) => entity.postId === postId && entity.userId === userId);
+    const document = await this.client.like.findFirst({
+      where: {
+        postId,
+        userId,
+      },
+    });
 
-    if (!like) {
+    if (!document) {
       return null;
     }
 
-    return this.entityFactory.create(like);
+    return this.createEntityFromDocument(document);
+  }
+
+  public async deleteById(id: string) {
+    await this.client.like.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

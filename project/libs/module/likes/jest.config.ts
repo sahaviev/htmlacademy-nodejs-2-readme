@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'module-likes',
+  // displayName: 'module-likes',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

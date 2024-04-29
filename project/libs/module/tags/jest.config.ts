@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'module-tags',
+  // displayName: 'module-tags',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

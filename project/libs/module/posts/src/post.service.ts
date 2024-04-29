@@ -42,7 +42,6 @@ export class PostService {
     postEntity.photoUrl = dto.photoUrl;
     postEntity.quoteText = dto.quoteText;
     postEntity.quoteAuthor = dto.quoteAuthor;
-    postEntity.tags = tags;
 
     await this.postRepository.update(postEntity);
 

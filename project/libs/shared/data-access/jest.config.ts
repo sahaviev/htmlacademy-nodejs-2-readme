@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'data-access',
+  // displayName: 'data-access',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

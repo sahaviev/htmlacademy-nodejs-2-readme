@@ -1,9 +1,5 @@
-import { Post, PostState, PostType, PostFields, Tag } from '@project/shared/types';
+import { Post, PostFields, PostState, PostType, Tag } from '@project/shared/types';
 import { Entity, StorableEntity } from '@project/shared/core';
-
-import { LikeEntity } from '@project/module/likes';
-import { CommentEntity } from '@project/module/comments';
-import { TagEntity } from '@project/module/tags';
 
 import { CreatePostDto } from './dto/create-post.dto';
 
@@ -26,9 +22,6 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
   public announcement?: string;
   public postText?: string;
   public videoLink?: string;
-  public tags: TagEntity[];
-  public likes: LikeEntity[];
-  public comments: CommentEntity[];
 
   constructor(data: Post) {
     super();
@@ -55,16 +48,11 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
     this.announcement = data.announcement;
     this.postText = data.postText;
     this.videoLink = data.videoLink;
-    this.tags = data.tags.map(TagEntity.fromObject);
-    this.likes = data.likes.map(LikeEntity.fromObject);
-    this.comments = data.comments.map(CommentEntity.fromObject);
 
     return this;
   }
 
   public toPOJO(): Post {
-    const fields = Object.values(PostFields).filter((field) => this[field] !== undefined);
-
     const post = {
       id: this.id,
       userId: this.userId,
@@ -74,18 +62,13 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
       updatedAt: this.updatedAt,
       isReposted: this.isReposted,
       publishDate: this.publishDate,
-      tags: this.tags.map((tag) => tag.toPOJO()),
-      comments: this.comments.map((comment) => comment.toPOJO()) ?? [],
-      likes: this.likes.map((like) => like.toPOJO()),
+      creatorUserId: this.creatorUserId ? this.creatorUserId : null,
+      originalPostId: this.originalPostId ? this.originalPostId : null,
     };
 
-    if(this.isReposted) {
-      post['creatorUserId'] = this.creatorUserId;
-      post['originalPostId'] = this.originalPostId;
-    }
 
-    for(const property of fields) {
-      post[property] = this[property];
+    for(const property of Object.values(PostFields)) {
+      post[property] = this[property] ? this[property] : null;
     }
 
     return post;
@@ -94,7 +77,7 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
   static fromDto(dto: CreatePostDto, tags: Tag[]): PostEntity {
     return new PostEntity({
       userId: dto.userId,
-      postState: undefined,
+      postState: PostState.Published,
       postType: dto.postType,
       title: dto.title,
       videoLink: dto.videoLink,
@@ -105,9 +88,6 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
       photoUrl: dto.photoUrl,
       quoteText: dto.quoteText,
       quoteAuthor: dto.quoteAuthor,
-      comments: [],
-      likes: [],
-      tags,
     });
   }
 }

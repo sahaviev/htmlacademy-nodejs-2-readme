@@ -4,3 +4,5 @@ export { TagRdo } from './rdo/tag.rdo';
 export { TagEntity } from './tag.entity';
 export { TagService } from './tag.service';
 export { TagModule } from './tag.module';
+export { TagResponseMessage } from './tag.constant';
+

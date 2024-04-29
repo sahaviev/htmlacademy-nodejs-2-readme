@@ -20,7 +20,6 @@ export class TagService {
 
   public async getTagsByIds(tagIds: string[]) {
     const tagEntities = await this.tagRepository.findByIds(tagIds);
-
     if(tagIds.length !== tagEntities.length) {
       const tagMap:  Map<string, TagEntity> = new Map();
       tagEntities.forEach(tag => tagMap.set(tag.id, tag));
@@ -37,7 +36,6 @@ export class TagService {
     dto.title = dto.title.toLocaleLowerCase();
 
     const existsTag = await this.tagRepository.findByTitle(dto.title);
-
     if (existsTag) {
       throw new ConflictException(`Tag with title «${dto.title}» already exists`)
     }
@@ -52,17 +50,17 @@ export class TagService {
     dto.title = dto.title.toLocaleLowerCase();
 
     const existsTag = await this.tagRepository.findByTitle(dto.title);
-
     if (existsTag) {
       throw new ConflictException(`Tag with title «${dto.title}» already exists`)
     }
-    const tagEntity = new TagEntity(dto);
-    try {
-      await this.tagRepository.save(tagEntity);
-      return tagEntity;
-    } catch {
+
+    const tagEntity = await this.tagRepository.findById(tagId);
+    tagEntity.title = dto.title.toLocaleLowerCase();
+    if (!tagEntity) {
       throw new NotFoundException(`Tag with id «${tagId}» not found`);
     }
+    await this.tagRepository.update(tagEntity);
+    return tagEntity;
   }
 
   public async deleteTag(tagId: string) {

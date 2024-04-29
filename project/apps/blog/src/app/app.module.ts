@@ -9,9 +9,10 @@ import { PostsController } from 'apps/blog/src/app/posts.controller';
 import { CommentsController } from 'apps/blog/src/app/comments.controller';
 import { LikesController } from 'apps/blog/src/app/likes.controller';
 import { TagsController } from 'apps/blog/src/app/tags.controller';
+import { PrismaClientModule } from '@project/models';
 
 @Module({
-  imports: [TagModule, LikeModule, CommentModule, PostModule],
+  imports: [TagModule, LikeModule, CommentModule, PostModule, PrismaClientModule],
   controllers: [PostsController, CommentsController, LikesController, TagsController],
 })
 export class AppModule {}

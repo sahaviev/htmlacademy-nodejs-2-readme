@@ -4,4 +4,6 @@ export const PostResponseMessage = {
   PostCreated: 'Post created successfully',
   PostUpdated: 'Post updated successfully',
   PostDeleted: 'Post deleted successfully',
+  PostNotFound: 'Post not found',
+  TagsNotFound: 'Tags not found',
 } as const;

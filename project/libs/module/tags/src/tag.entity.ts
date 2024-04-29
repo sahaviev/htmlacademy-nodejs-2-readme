@@ -17,7 +17,7 @@ export class TagEntity extends Entity implements StorableEntity<Tag> {
   }
 
   public populate(data: Tag): void {
-    this.id = data.id ?? '';
+    this.id = data.id;
     this.title = data.title;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
